@@ -15,7 +15,10 @@ Built exclusively for **Kismet Fine Rugs** to streamline their photography workf
 - 🔒 **Duplicate Prevention**: Used descriptors automatically disabled
 - ✅ **Real-time Preview**: See new filenames before downloading
 - 📦 **ZIP Download**: Get all renamed images in a single, organized ZIP file
-- 📷 **RAW Format Support**: Accepts JPG, PNG, and ARW (Sony RAW) files
+- 📷 **ARW Support**: Full Sony RAW file support with automatic preview extraction
+  - Automatically extracts embedded JPEG from ARW files for preview
+  - Preserves original ARW file quality in downloads
+  - Supports JPG, PNG, and ARW (Sony RAW) formats
 - 🔐 **100% Private**: All processing happens locally in your browser
 - 🚀 **Zero Installation**: Works offline as a single, self-contained HTML file
 - 📱 **Responsive Design**: Works flawlessly on desktop, tablet, and mobile
@@ -80,10 +83,12 @@ This creates a single `dist/index.html` file (~500KB) that can be:
 ## 📝 Output Format
 
 ```
-Input:  IMG_2045.jpg, IMG_2046.jpg, IMG_2047.jpg
+Input:  IMG_2045.jpg, IMG_2046.arw, IMG_2047.png
 SKU:    63755
-Output: 63755front.jpg, 63755diag1.jpg, 63755rear.jpg
+Output: 63755front.jpg, 63755diag1.arw, 63755rear.png
 ```
+
+**Note:** Original file formats are preserved - ARW files remain as ARW with new filenames.
 
 ## 🧪 Testing
 

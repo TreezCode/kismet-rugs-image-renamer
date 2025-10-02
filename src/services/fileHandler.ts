@@ -28,16 +28,136 @@ export const validateFile = (file: File): ValidationResult => {
 };
 
 /**
+ * Extract embedded JPEG preview from ARW file
+ * Sony ARW files contain multiple embedded JPEGs - this function extracts the largest valid one
+ * and resizes it for display as a preview thumbnail
+ */
+const extractArwThumbnail = async (file: File): Promise<string | null> => {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const bytes = new Uint8Array(arrayBuffer);
+    
+    // Find all embedded JPEGs in the ARW file by scanning for JPEG markers
+    const jpegs: { start: number; end: number; size: number }[] = [];
+    
+    for (let i = 0; i < bytes.length - 1; i++) {
+      // JPEG start marker: 0xFFD8
+      if (bytes[i] === 0xFF && bytes[i + 1] === 0xD8) {
+        const startIndex = i;
+        
+        // Find corresponding end marker: 0xFFD9
+        for (let j = startIndex + 2; j < bytes.length - 1; j++) {
+          if (bytes[j] === 0xFF && bytes[j + 1] === 0xD9) {
+            const endIndex = j + 2;
+            jpegs.push({
+              start: startIndex,
+              end: endIndex,
+              size: endIndex - startIndex
+            });
+            i = endIndex; // Skip past this JPEG to find the next one
+            break;
+          }
+        }
+      }
+    }
+    
+    if (jpegs.length === 0) {
+      return null;
+    }
+    
+    // Sort JPEGs by size (largest first) and try each until we find a valid one
+    const sortedJpegs = [...jpegs].sort((a, b) => b.size - a.size);
+    
+    // Recursively try each JPEG until we find one that loads successfully
+    const tryJpeg = async (index: number): Promise<string> => {
+      if (index >= sortedJpegs.length) {
+        throw new Error('No valid embedded JPEGs found');
+      }
+      
+      const jpeg = sortedJpegs[index];
+      const jpegBytes = bytes.slice(jpeg.start, jpeg.end);
+      const blob = new Blob([jpegBytes], { type: 'image/jpeg' });
+      const blobUrl = URL.createObjectURL(blob);
+      
+      return new Promise<string>((resolve, reject) => {
+        const img = new Image();
+        
+        img.onload = () => {
+          URL.revokeObjectURL(blobUrl);
+          
+          // Create resized preview (200px width)
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          
+          if (!ctx) {
+            reject(new Error('Canvas context not available'));
+            return;
+          }
+          
+          const scale = 200 / img.width;
+          canvas.width = 200;
+          canvas.height = img.height * scale;
+          
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', 0.8));
+        };
+        
+        img.onerror = async () => {
+          URL.revokeObjectURL(blobUrl);
+          
+          // This JPEG failed, try the next one
+          try {
+            const result = await tryJpeg(index + 1);
+            resolve(result);
+          } catch (err) {
+            reject(err);
+          }
+        };
+        
+        img.src = blobUrl;
+      });
+    };
+    
+    return tryJpeg(0);
+    
+  } catch (error) {
+    console.error('ARW preview extraction failed:', error);
+    return null;
+  }
+};
+
+/**
  * Generate a thumbnail preview from an image file
- * For ARW files, returns a placeholder icon since browsers can't render RAW
+ * For ARW files: extracts embedded JPEG and creates preview
+ * For JPG/PNG: creates standard thumbnail preview
  */
 export const generatePreview = (file: File): Promise<string> => {
-  // Check if it's an ARW file - use placeholder preview
   const isArw = file.name.toLowerCase().endsWith('.arw');
   
   if (isArw) {
-    // Return a placeholder icon for ARW files (RAW format not supported by browsers)
-    return Promise.resolve('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDIwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0xMDAgNTBDNzQuNjI0NCA1MCA1NCA3MC42MjQ0IDU0IDk2QzU0IDEyMS4zNzYgNzQuNjI0NCAxNDIgMTAwIDE0MkMxMjUuMzc2IDE0MiAxNDYgMTIxLjM3NiAxNDYgOTZDMTQ2IDcwLjYyNDQgMTI1LjM3NiA1MCAxMDAgNTBaIiBmaWxsPSIjOUIxQTM3Ii8+CjxwYXRoIGQ9Ik0xMDAgNzBDODUuNjQzNiA3MCA3NCA4MS42NDM2IDc0IDk2Qzc0IDExMC4zNTYgODUuNjQzNiAxMjIgMTAwIDEyMkMxMTQuMzU2IDEyMiAxMjYgMTEwLjM1NiAxMjYgOTZDMTI2IDgxLjY0MzYgMTE0LjM1NiA3MCAxMDAgNzBaIiBmaWxsPSIjRUY0NDQ0Ii8+Cjx0ZXh0IHg9IjEwMCIgeT0iMTcwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiM2QjcyODAiIGZvbnQtd2VpZ2h0PSI2MDAiPkFSVyBGaWxlPC90ZXh0Pgo8L3N2Zz4=');
+    // Extract embedded JPEG from ARW file
+    return extractArwThumbnail(file).then((thumbnail) => {
+      if (thumbnail) {
+        return thumbnail;
+      }
+      
+      // Fallback placeholder if no valid JPEG found
+      const svg = `
+        <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="200" fill="#f3f4f6"/>
+          <circle cx="100" cy="80" r="30" fill="#9b1a37"/>
+          <circle cx="100" cy="80" r="20" fill="#ef4444"/>
+          <rect x="70" y="75" width="60" height="10" rx="5" fill="#fff" opacity="0.3"/>
+          <text x="100" y="140" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#374151">
+            ARW FILE
+          </text>
+          <text x="100" y="160" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#6b7280">
+            No Preview Available
+          </text>
+        </svg>
+      `;
+      return `data:image/svg+xml;base64,${btoa(svg)}`;
+    });
   }
   
   return new Promise((resolve, reject) => {

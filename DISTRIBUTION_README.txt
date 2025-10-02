@@ -35,10 +35,10 @@ Output: 63755front.arw, 63755diag1.jpg, 63755rear.png
 
 ARW FILES
 ---------
-- ARW files show a placeholder icon (browsers can't preview RAW)
-- File uploads and renames perfectly
-- Original RAW quality preserved
-- No conversion happens
+- ARW files show actual image previews (extracted from embedded JPEG)
+- Previews are automatically generated for easy descriptor selection
+- Original RAW quality preserved in downloads
+- No conversion happens - ARW files remain as ARW
 
 FEATURES
 --------
