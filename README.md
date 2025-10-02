@@ -15,6 +15,7 @@ Built exclusively for **Kismet Fine Rugs** to streamline their photography workf
 - 🔒 **Duplicate Prevention**: Used descriptors automatically disabled
 - ✅ **Real-time Preview**: See new filenames before downloading
 - 📦 **ZIP Download**: Get all renamed images in a single, organized ZIP file
+- 📷 **RAW Format Support**: Accepts JPG, PNG, and ARW (Sony RAW) files
 - 🔐 **100% Private**: All processing happens locally in your browser
 - 🚀 **Zero Installation**: Works offline as a single, self-contained HTML file
 - 📱 **Responsive Design**: Works flawlessly on desktop, tablet, and mobile

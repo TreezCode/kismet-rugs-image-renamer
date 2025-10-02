@@ -25,6 +25,8 @@ export const UploadZone: React.FC = () => {
     accept: {
       'image/jpeg': ['.jpg', '.jpeg'],
       'image/png': ['.png'],
+      'image/x-sony-arw': ['.arw'],
+      'image/arw': ['.arw'],
     },
     multiple: true,
   });
@@ -53,7 +55,7 @@ export const UploadZone: React.FC = () => {
           {isDragActive ? '📸 Drop images here' : 'Drag & drop images or click to browse'}
         </p>
         <p className="text-sm text-gray-600">
-          <span className="font-medium text-brand-orange">JPG, PNG</span> • Max 11 images • Max 50MB per file
+          <span className="font-medium text-brand-orange">JPG, PNG, ARW</span> • Max 11 images • Max 50MB per file
         </p>
       </div>
     </div>
