@@ -103,8 +103,8 @@ Proprietary - Built for Kismet Fine Rugs
 
 ## 👤 Author
 
-[Your Name]
+TreezCode
 
 ## 📧 Support
 
-For issues or questions, contact: [your-email@example.com]
+For issues or questions, contact: treezcode@gmail.com
