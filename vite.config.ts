@@ -4,6 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  base: './', // Use relative paths for offline compatibility
   build: {
     // Inline all assets for single HTML file
     assetsInlineLimit: 100000000,
