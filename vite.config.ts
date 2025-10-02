@@ -1,9 +1,13 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import { viteSingleFile } from 'vite-plugin-singlefile'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    viteSingleFile() // Inline everything into a single HTML file for offline use
+  ],
   base: './', // Use relative paths for offline compatibility
   build: {
     // Inline all assets for single HTML file
@@ -13,9 +17,6 @@ export default defineConfig({
         // Create single file
         manualChunks: undefined,
         inlineDynamicImports: true,
-        entryFileNames: 'assets/[name].js',
-        chunkFileNames: 'assets/[name].js',
-        assetFileNames: 'assets/[name].[ext]'
       }
     },
     minify: 'terser'

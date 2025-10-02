@@ -1,15 +1,47 @@
 KISMET FINE RUGS - IMAGE BATCH RENAMER
-Version 1.0 - Release Notes
+Version 1.0.2 - Single File Edition
 
 Release Date: October 1, 2025
-Build: Production
+Build: Production (Single HTML File)
 Repository: https://github.com/TreezCode/kismet-rugs-image-renamer
+Online Version: https://kismet-image-renamer.netlify.app
 
 ===========================================
-INITIAL RELEASE - VERSION 1.0
+VERSION 1.0.2 - SINGLE FILE EDITION
 ===========================================
 
-NEW FEATURES:
+MAJOR IMPROVEMENT:
+✓ Complete rewrite as single self-contained HTML file
+✓ All JavaScript and CSS inlined (404 KB total)
+✓ Zero external dependencies (except optional favicon)
+✓ No CORS errors - works perfectly offline
+✓ No separate folders required
+✓ Just double-click and run!
+
+TECHNICAL CHANGES:
+✓ Added vite-plugin-singlefile
+✓ All assets embedded in HTML
+✓ Removed external script/CSS references
+✓ Single file architecture
+✓ Truly portable solution
+
+VERSION HISTORY:
+-------------------------------------------
+v1.0.2 (Oct 1, 2025) - Single File Edition
+- Complete solution in one HTML file
+- Fixed all CORS issues permanently
+- Simplified distribution
+
+v1.0.1 (Oct 1, 2025) - Relative Paths
+- Attempted fix with relative paths
+- Still had CORS issues with ES modules
+
+v1.0 (Oct 1, 2025) - Initial Release
+- Full featured application
+- Required separate asset files
+-------------------------------------------
+
+FEATURES:
 ✓ Custom Kismet Fine Rugs branded interface
 ✓ SKU-based image renaming system
 ✓ 11 professional descriptor options
@@ -20,32 +52,38 @@ NEW FEATURES:
 ✓ Accessibility compliant design
 ✓ Responsive layout (desktop, tablet, mobile)
 ✓ 100% client-side processing (privacy first)
-✓ Offline capability
+✓ Truly offline capable - no web server needed
 
 TECHNICAL SPECIFICATIONS:
 - Framework: React 18
 - Language: TypeScript 5
-- Build Tool: Vite 5
-- Styling: Tailwind CSS 4
-- State: Zustand
-- Icons: Lucide React
-- File Upload: React Dropzone
-- ZIP Creation: JSZip
+- Build Tool: Vite 5 + vite-plugin-singlefile
+- Styling: Tailwind CSS 4 (inlined)
+- State: Zustand (bundled)
+- Icons: Lucide React (bundled)
+- File Upload: React Dropzone (bundled)
+- ZIP Creation: JSZip (bundled)
+- Architecture: Single file with all dependencies embedded
 
 BROWSER SUPPORT:
 ✓ Chrome 120+
 ✓ Firefox 115+
 ✓ Safari 16+
 ✓ Edge 120+
+✓ All modern browsers with ES6 support
 
 FILE SIZE:
-- Total Package: ~408 KB
-- Compressed (gzipped): ~135 KB
-- Loads in < 1 second on average connection
+- HTML file: 404 KB (~133 KB gzipped)
+- Favicon: 5 KB (optional)
+- Total: 409 KB for complete application
 
 DEPLOYMENT OPTIONS:
-1. Online: https://[your-netlify-url].netlify.app
-2. Offline: Double-click Kismet_Image_Renamer.html
+1. Online: https://kismet-image-renamer.netlify.app
+2. Offline: Double-click Kismet_Image_Renamer.html ✓ WORKS!
+
+USAGE:
+Simply double-click the HTML file. No installation, no configuration,
+no web server, no internet connection needed. It just works!
 
 TESTING STATUS:
 ✓ Full end-to-end workflow tested
@@ -53,17 +91,14 @@ TESTING STATUS:
 ✓ ZIP download confirmed working
 ✓ Cross-browser tested
 ✓ Accessibility audit passed
-
-FUTURE ENHANCEMENTS (Roadmap):
-- Batch processing for multiple SKUs
-- Custom descriptor sets
-- Image preview thumbnails enhancement
-- Export filename list to CSV
-- Advanced filtering options
+✓ Offline mode fully verified ✓ FIXED!
+✓ Single file architecture tested
+✓ CORS issues completely resolved ✓ FINAL!
 
 SUPPORT:
 GitHub Issues: https://github.com/TreezCode/kismet-rugs-image-renamer/issues
 Documentation: See USER_GUIDE.md
+Online Tool: https://kismet-image-renamer.netlify.app
 
 ===========================================
 © 2025 Kismet Fine Rugs. All rights reserved.
